@@ -56,5 +56,7 @@ public class SchemaIntrospection {
         System.out.println("*** Schema as string: " + schemaAsString);
         String schemaAsJson = schema.prettyJson();  // Extracts the schema as a JSON object in a string
         System.out.println("*** Schema as JSON: " + schemaAsJson);
+
+
     }
 }

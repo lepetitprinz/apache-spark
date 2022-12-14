@@ -1,5 +1,6 @@
 package dataframe;
 
+import org.apache.spark.Partition;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
@@ -53,5 +54,13 @@ public class JsonIngestionSchemaManipulation {
         System.out.println("*** Dataframe transformed");
         df.show(5);
         df.printSchema();
+
+        System.out.println("*** Looking at partitions");
+        Partition[] partitions = df.rdd().partitions();
+        int partitionCount = partitions.length;
+        System.out.println("Partition count before repartition:" + partitionCount);
+
+        df = df.repartition(4);
+        System.out.println("Partition count after prepartition: " + df.rdd().partitions().length);
     }
 }
