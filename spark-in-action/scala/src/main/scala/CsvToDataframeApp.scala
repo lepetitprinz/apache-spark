@@ -1,8 +1,6 @@
-import org.apache.spark.sql.Dataset
-import org.apache.spark.sql.Row
 import org.apache.spark.sql.SparkSession
 
-object CsvToDataframeScalaApp {
+object CsvToDataframeApp {
   def main(args: Array[String]): Unit = {
 
     // Creates a session on a local master
