@@ -1,3 +1,5 @@
+package dataframe
+
 import org.apache.spark.sql.SparkSession
 
 object CsvToDataframeApp {
@@ -8,6 +10,12 @@ object CsvToDataframeApp {
       .appName("CSV to Dataset")
       .master("local[*]")
       .getOrCreate
+
+    // Set log level
+    spark.sparkContext.setLogLevel("ERROR")
+
+    // Set log level
+    spark.sparkContext.setLogLevel("ERROR")
 
     // Reads a CSV file with header, called books.csv, stores it in a dataframe
     val df = spark.read.format("csv")

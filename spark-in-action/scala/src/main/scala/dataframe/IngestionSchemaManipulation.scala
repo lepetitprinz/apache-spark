@@ -1,9 +1,7 @@
-import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.Dataset
-import org.apache.spark.sql.Row
+package dataframe
 
-import org.apache.spark.sql.functions.lit
-import org.apache.spark.sql.functions.concat
+import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.functions.{concat, lit}
 
 object IngestionSchemaManipulation {
   def main(args: Array[String]): Unit = {
@@ -12,6 +10,9 @@ object IngestionSchemaManipulation {
       .appName("Restaurants in Wake Country, NC")
       .master("local[*]")
       .getOrCreate()
+
+    // Set log level
+    spark.sparkContext.setLogLevel("ERROR")
 
     // Read a csv file
     var df = spark.read.format("csv")

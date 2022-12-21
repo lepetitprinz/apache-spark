@@ -1,6 +1,7 @@
+package dataframe
+
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.functions.lit
-import org.apache.spark.sql.functions.concat
+import org.apache.spark.sql.functions.{concat, lit}
 
 object SchemaIntrospectionScalaApp {
   def main(args: Array[String]): Unit = {
@@ -9,6 +10,9 @@ object SchemaIntrospectionScalaApp {
       .appName("Schema introspection")
       .master("local")
       .getOrCreate
+
+    // Set log level
+    spark.sparkContext.setLogLevel("ERROR")
 
     // Reads a csv file with header, stores it in a dataframe
     var df = spark.read

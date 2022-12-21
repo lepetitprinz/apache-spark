@@ -1,3 +1,5 @@
+package dataframe
+
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions.{col, concat, lit, split}
 
@@ -9,6 +11,9 @@ object JsonIngestionSchemaManipulationApp {
       .appName("Json Ingestion and Schema Manipulation")
       .master("local")
       .getOrCreate()
+
+    // Set log level
+    spark.sparkContext.setLogLevel("ERROR")
 
     var df = spark.read.format("json")
       .load("/Users/yjkim-studio/data/spark/Restaurants_in_Durham_County_NC.json")

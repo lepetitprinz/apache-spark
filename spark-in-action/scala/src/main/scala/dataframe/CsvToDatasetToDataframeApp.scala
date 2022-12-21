@@ -1,8 +1,10 @@
+package dataframe
+
+import org.apache.spark.sql.{Dataset, Row, SparkSession, functions => F}
+
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-import org.apache.spark.sql.{Dataset, Row, SparkSession}
-import org.apache.spark.sql.{functions => F}
 object CsvToDatasetToDataframeApp {
   def rowToBook(row: Row): Book = {
     val dateAsString = row.getAs[String]("releaseDate")
@@ -27,6 +29,9 @@ object CsvToDatasetToDataframeApp {
       .appName("csv to dataframe to dataset<Book> and back")
       .master("local")
       .getOrCreate()
+
+    // Set log level
+    spark.sparkContext.setLogLevel("ERROR")
 
     val filename = "data/books.csv"
     val df = spark.read.format("csv")

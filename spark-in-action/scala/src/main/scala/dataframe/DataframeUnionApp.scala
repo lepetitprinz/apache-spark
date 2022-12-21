@@ -1,5 +1,7 @@
-import org.apache.spark.sql.{SparkSession, Dataset, Row}
+package dataframe
+
 import org.apache.spark.sql.functions.{col, concat, lit, split}
+import org.apache.spark.sql.{Dataset, Row, SparkSession}
 object DataframeUnionApp {
   def main(args: Array[String]): Unit = {
     // create a session on a local master
@@ -7,6 +9,9 @@ object DataframeUnionApp {
       .appName("Union of two dataframes")
       .master("local")
       .getOrCreate()
+
+    // Set log level
+    spark.sparkContext.setLogLevel("ERROR")
 
     val df1 = spark.read.format("csv")
       .option("header", "true")
