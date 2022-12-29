@@ -36,11 +36,10 @@ object PiComputeClusterApp {
     val t0 = System.currentTimeMillis
     val spark = SparkSession.builder
       .appName("Spark Pi on a cluster")
-      .master("spark://un:7077")
-      .config("spark.executor.memory", "4g")
+      .master("spark://spark-master:7077")
+      .config("spark.executor.memory", "512m")
       // Spark can share a jar from which it is launched - either via spark-submit or
       // via direct connection
-      .config("spark.jars", "/Users/yjkim-studio/src/spark/spark-in-action/scala/PiComputeClusterApp.jar")
       .getOrCreate
 
     val t1 = System.currentTimeMillis
@@ -62,8 +61,12 @@ object PiComputeClusterApp {
     val t3 = System.currentTimeMillis
     println("Throwing darts done in " + (t3 - t2) + " ms")
 
+    val dartsInCircle = dartsDs.reduce(new DartReducer)
+    val t4 = System.currentTimeMillis
+    println("Analyzing results in " + (t4 - t3) + " ms")
 
+    println("Pi is roughly " + 4.0 * dartsInCircle / numberOfThrows)
+
+    spark.stop()
   }
-
-
 }

@@ -1,6 +1,5 @@
 package deployment
 
-import java.util.ArrayList
 import org.apache.spark.api.java.function.{MapFunction, ReduceFunction}
 import org.apache.spark.sql.{Encoders, Row, SparkSession}
 
