@@ -1,4 +1,4 @@
-package ingestion.parquet;
+package ingestion.file.parquet;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;

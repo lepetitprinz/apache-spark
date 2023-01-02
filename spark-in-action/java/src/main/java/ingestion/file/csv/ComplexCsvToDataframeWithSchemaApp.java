@@ -1,4 +1,4 @@
-package ingestion.csv;
+package ingestion.file.csv;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;

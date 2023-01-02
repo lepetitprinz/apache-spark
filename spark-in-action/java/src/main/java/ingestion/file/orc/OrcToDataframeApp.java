@@ -1,4 +1,4 @@
-package ingestion.orc;
+package ingestion.file.orc;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;

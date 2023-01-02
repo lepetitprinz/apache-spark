@@ -1,4 +1,4 @@
-package ingestion.json;
+package ingestion.file.json;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;

@@ -1,30 +1,29 @@
-package ingestion.text;
+package ingestion.file.avro;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 
-public class TextToDataframeApp {
-
+public class AvroToDataframeApp {
     public static void main(String[] args) {
-        TextToDataframeApp app = new TextToDataframeApp();
+        AvroToDataframeApp app = new AvroToDataframeApp();
         app.start();
     }
 
-    private void start() {
-        // Creates a session on a local master
+    private void start () {
         SparkSession spark = SparkSession.builder()
-                .appName("Text to Dataframe")
+                .appName("Avro to Dataframe")
                 .master("local")
                 .getOrCreate();
 
         spark.sparkContext().setLogLevel("ERROR");
 
-        // Reads a text file, stores it in a dataframe
-        Dataset<Row> df = spark.read().format("text")
-                .load("data/ch07/romeo-juliet-pg1777.txt");
+        Dataset<Row> df = spark.read()
+                .format("avro")
+                .load("data/ch07/weather.avro");
 
         df.show(10);
         df.printSchema();
+        System.out.println("The dataframe has " + df.count() + " rows");
     }
 }
