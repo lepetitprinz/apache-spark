@@ -1,4 +1,4 @@
-package ingestion.database;
+package ingestion.database.dialect;
 
 import org.apache.spark.sql.jdbc.JdbcDialect;
 

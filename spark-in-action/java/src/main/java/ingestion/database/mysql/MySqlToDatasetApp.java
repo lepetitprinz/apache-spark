@@ -1,4 +1,4 @@
-package ingestion.database;
+package ingestion.database.mysql;
 
 import java.util.Properties;
 
