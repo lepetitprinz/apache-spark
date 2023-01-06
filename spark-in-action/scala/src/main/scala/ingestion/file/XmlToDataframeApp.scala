@@ -1,22 +1,24 @@
-package ingestion
+package ingestion.file
 
 import org.apache.spark.sql.SparkSession
 
-object TextToDataframeApp {
+object XmlToDataframeApp {
 
   def main(args: Array[String]): Unit = {
+    // create a session on a local master
     val spark: SparkSession = SparkSession.builder
-      .appName("Text to Dataframe")
+      .appName("XML to Dataframe")
       .master("local[*]")
       .getOrCreate
 
     spark.sparkContext.setLogLevel("ERROR")
 
     val df = spark.read
-      .format("text")
-      .load("data/ch07/romeo-juliet-pg1777.txt")
+      .format("xml")
+      .option("rowTag", "row")
+      .load("data/ch07/nasa-patents.xml")
 
-    df.show(10)
+    df.show(5)
     df.printSchema
 
     spark.stop

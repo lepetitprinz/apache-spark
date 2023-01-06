@@ -1,4 +1,4 @@
-package ingestion
+package ingestion.file.csv
 
 import org.apache.spark.sql.SparkSession
 

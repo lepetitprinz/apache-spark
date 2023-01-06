@@ -1,4 +1,4 @@
-package ingestion
+package ingestion.file.json
 
 import org.apache.spark.sql.SparkSession
 
