@@ -29,8 +29,8 @@ public class ExifDirectoryRelation
     private static final long serialVersionUID = 4598175080399877334L;
     private static transient Logger log =
             LoggerFactory.getLogger(ExifDirectoryRelation.class);
-    private SQLContext sqlContext;
-    private Schema schema = null;
+    private SQLContext sqlContext;  // need the application SQL context and must implement the getter
+    private Schema schema = null;  // Caches the schema to avoid recalculation
     private RecursiveExtensionFilteredLister photoLister;
 
     @Override
@@ -58,13 +58,10 @@ public class ExifDirectoryRelation
         log.debug("-> buildScan()");
         schema();
 
-        // I have isolated the work to a method to keep the plumbing code as
-        // simple
-        // as possible.
-        List<PhotoMetadata> table = collectData();
+        List<PhotoMetadata> table = collectData();  // to build a list with all metadata
 
         @SuppressWarnings("resource")
-        JavaSparkContext sparkContext =
+        JavaSparkContext sparkContext =  // Extracts the Spark context from the SQL context
                 new JavaSparkContext(sqlContext.sparkContext());
         JavaRDD<Row> rowRDD = sparkContext.parallelize(table)
                 .map(photo -> SparkBeanUtils.getRowFromBean(schema, photo));
