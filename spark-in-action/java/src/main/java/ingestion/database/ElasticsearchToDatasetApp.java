@@ -1,4 +1,4 @@
-package ingestion;
+package ingestion.database;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
