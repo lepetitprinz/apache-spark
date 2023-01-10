@@ -14,15 +14,15 @@ public @interface SparkColumn {
     /**
      * The name of the column can be overriden.
      */
-    String name() default "";
+    String name() default "";  // Overrides the column name
 
     /**
      * Forces the data type of the column
      */
-    String type() default "";
+    String type() default "";  // Overrides the column type
 
     /**
      * Forces the required/nullable property
      */
-    boolean nullable() default true;
+    boolean nullable() default true;  // Sets the nullable property
 }

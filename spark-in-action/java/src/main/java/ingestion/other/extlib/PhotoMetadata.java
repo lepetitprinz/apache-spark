@@ -21,6 +21,7 @@ public class PhotoMetadata implements Serializable {
             PhotoMetadata.class);
     private static final long serialVersionUID = -2589804417011601051L;
 
+    // Properties that will map to Spark columns
     private Timestamp dateTaken;
     private String directory;
     private String extension;
@@ -40,7 +41,7 @@ public class PhotoMetadata implements Serializable {
     /**
      * @return the dateTaken
      */
-    @SparkColumn(name = "Date")
+    @SparkColumn(name = "Date")  // specify the name of the column
     public Timestamp getDateTaken() {
         return dateTaken;
     }
@@ -83,7 +84,7 @@ public class PhotoMetadata implements Serializable {
     /**
      * @return the filename
      */
-    @SparkColumn(nullable = false)
+    @SparkColumn(nullable = false)  // Forces the nullable property to false
     public String getFilename() {
         return filename;
     }
@@ -91,7 +92,7 @@ public class PhotoMetadata implements Serializable {
     /**
      * @return the geoX
      */
-    @SparkColumn(type = "float")
+    @SparkColumn(type = "float")  // can force a type
     public Float getGeoX() {
         return geoX;
     }

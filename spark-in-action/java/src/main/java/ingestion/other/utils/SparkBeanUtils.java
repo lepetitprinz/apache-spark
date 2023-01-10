@@ -45,10 +45,12 @@ public class SparkBeanUtils {
 
             // The method we are working on is a getter
             String methodName = method.getName();
+
+            // Simple container used to store extra information
             SchemaColumn col = new SchemaColumn();
             col.setMethodName(methodName);
 
-            // We have a public method starting with get
+            // The properties for each column of the dataframe
             String columnName;
             DataType dataType;
             boolean nullable;
@@ -127,6 +129,7 @@ public class SparkBeanUtils {
                         dataType = getDataTypeFromReturnType(method);
                 }
 
+                // Checks if the column is required from the annotation
                 nullable = sparkColumn.nullable();
             }
 
@@ -194,6 +197,8 @@ public class SparkBeanUtils {
             columnIndex++;
             return "_c" + columnIndex;
         }
+
+        // Removes the "get" part from the method name
         columnName = methodName.substring(3);
         if (columnName.length() == 0) {
             // Very simplistic

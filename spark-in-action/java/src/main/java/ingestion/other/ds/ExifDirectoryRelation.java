@@ -77,12 +77,13 @@ public class ExifDirectoryRelation
      * The list of photos will be "mapped" and transformed into a Row.
      */
     private List<PhotoMetadata> collectData() {
+        // Builds a list of all the files by using the options
         List<File> photosToProcess = this.photoLister.getFiles();
         List<PhotoMetadata> list = new ArrayList<>();
-        PhotoMetadata photo;
 
+        PhotoMetadata photo;
         for (File photoToProcess : photosToProcess) {
-            photo = ExifUtils.processFromFilename(
+            photo = ExifUtils.processFromFilename(  // Extract the metadata from the file
                     photoToProcess.getAbsolutePath());
             list.add(photo);
         }
