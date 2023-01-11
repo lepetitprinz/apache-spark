@@ -14,16 +14,9 @@ public class RecordsInFilesGeneratorApp {
     private static Logger log = LoggerFactory
             .getLogger(RecordsInFilesGeneratorApp.class);
 
-    // Streaming duration in seconds
-    public int streamDuration = 60;
-
-    // Maximum number of records send at the same time
-    public int batchSize = 10;
-
-    /**
-     * Wait time between two batches of records, in seconds,  with an element
-     * of variability. If you say 10 seconds, the system will wait between 5s and 15s
-     */
+    public int streamDuration = 60;  // Streaming duration in seconds
+    public int batchSize = 10;  // Maximum number of records send at the same time
+     //Wait time between two batches of records, in seconds,  with an element of variability
     public int waitTime = 5;
 
     public static void main(String[] args) {
@@ -35,6 +28,7 @@ public class RecordsInFilesGeneratorApp {
             dir.mkdirs();
         }
 
+        // Structure of the record
         RecordStructure rs = new RecordStructure("contact")
                 .add("fname", FieldType.FIRST_NAME)
                 .add("mname", FieldType.FIRST_NAME)
@@ -49,16 +43,19 @@ public class RecordsInFilesGeneratorApp {
     private void start(RecordStructure rs, String outputDirectory) {
         log.debug("-> start (..., {})", outputDirectory);
         long start = System.currentTimeMillis();
-        while (start + streamDuration * 1000 > System.currentTimeMillis()) {
+        while (start + streamDuration * 1000L > System.currentTimeMillis()) {
+            // Will generate up to batch size records in the file
             int maxRecord = RecordGeneratorUtils.getRandomInt(batchSize) + 1;
+
+            // Writes the record in a file
             RecordWriterUtils.write(
                     rs.getRecordName() + "_" + System.currentTimeMillis() + ".txt",
                     rs.getRecords(maxRecord, false),
                     outputDirectory);
             try {
                 Thread.sleep(RecordGeneratorUtils.getRandomInt(waitTime * 1000)
-                + waitTime * 1000 / 2);
-            } catch (InterruptedException e) {}
+                + waitTime * 1000L / 2);  // Waits a random time
+            } catch (InterruptedException ignored) {}
         }
     }
 }

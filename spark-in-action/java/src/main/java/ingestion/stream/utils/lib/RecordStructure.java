@@ -18,11 +18,7 @@ public class RecordStructure {
     private String recordName;
     private LinkedHashMap<String, ColumnProperty> columns;
     private List<Integer> identifiers;
-
-    /**
-     * A record can be linked to another to ease joints.
-     */
-    private RecordStructure linkedRecord;
+    private RecordStructure linkedRecord;  // A record can be linked to another to ease joints.
 
     public RecordStructure(String recordName) {
         init(recordName, null);
