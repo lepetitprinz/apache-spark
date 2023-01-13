@@ -38,10 +38,10 @@ public class StreamingUtils {
         this.inputDirectory +=
                 "streaming" + File.separator + "in" + File.separator;
         createInputDirectory(this.inputDirectory);
-        this.inputSubDirectory1 += this.inputDirectory + File.separator + "s1"
+        this.inputSubDirectory1 = this.inputDirectory + File.separator + "s1"
                 + File.separator;
         createInputDirectory(this.inputSubDirectory1);
-        this.inputSubDirectory2 += this.inputDirectory + File.separator + "s2"
+        this.inputSubDirectory2 = this.inputDirectory + File.separator + "s2"
                 + File.separator;
         createInputDirectory(this.inputSubDirectory2);
 
