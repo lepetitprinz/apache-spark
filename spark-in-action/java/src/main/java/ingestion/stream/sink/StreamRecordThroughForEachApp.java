@@ -1,5 +1,7 @@
 package ingestion.stream.sink;
 
+import java.util.concurrent.TimeoutException;
+
 import ingestion.stream.utils.lib.StreamingUtils;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -11,15 +13,16 @@ import org.apache.spark.sql.types.StructType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.TimeoutException;
-
-public class StreamRecordOutputKafkaApp {
-    private static Logger log = LoggerFactory.getLogger(
-            StreamRecordOutputKafkaApp.class
-    );
+/**
+ * Analyzes the records on the stream and send each record to a debugger class.
+ *
+ */
+public class StreamRecordThroughForEachApp {
+    private static Logger log =
+            LoggerFactory.getLogger(StreamRecordThroughForEachApp.class);
 
     public static void main(String[] args) {
-        StreamRecordOutputKafkaApp app = new StreamRecordOutputKafkaApp();
+        StreamRecordThroughForEachApp app = new StreamRecordThroughForEachApp();
         try {
             app.start();
         } catch (TimeoutException e) {
@@ -50,12 +53,9 @@ public class StreamRecordOutputKafkaApp {
 
         StreamingQuery query = df
                 .writeStream()
-                .outputMode(OutputMode.Append())
-                .format("kafka")
-                .option("kafka.bootstrap.servers", "host1:port1,host2:port2")
-                .option("topic", "updates")
+                .outputMode(OutputMode.Update())
+                .foreach(new RecordLogDebugger())
                 .start();
-
         try {
             query.awaitTermination(60000);
         } catch (StreamingQueryException e) {
@@ -66,5 +66,6 @@ public class StreamRecordOutputKafkaApp {
         }
 
         log.debug("<- start()");
+
     }
 }

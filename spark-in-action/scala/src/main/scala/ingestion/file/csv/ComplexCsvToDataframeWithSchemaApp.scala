@@ -1,6 +1,6 @@
 package ingestion.file.csv
 
-import ingestion.utils.SchemaInspector
+import ingestion.file.utils.SchemaInspector
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.types.{DataTypes, StructField}
 

@@ -91,3 +91,8 @@ replay_pid*
 *.xml
 *.jpg
 *.txt
+*.csv
+*.json
+*.orc
+*.parquet
+*.avro

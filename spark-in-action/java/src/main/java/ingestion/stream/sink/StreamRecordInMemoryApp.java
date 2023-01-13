@@ -1,25 +1,23 @@
 package ingestion.stream.sink;
 
+import java.util.concurrent.TimeoutException;
+
 import ingestion.stream.utils.lib.StreamingUtils;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.streaming.OutputMode;
 import org.apache.spark.sql.streaming.StreamingQuery;
-import org.apache.spark.sql.streaming.StreamingQueryException;
 import org.apache.spark.sql.types.StructType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.TimeoutException;
-
-public class StreamRecordOutputKafkaApp {
-    private static Logger log = LoggerFactory.getLogger(
-            StreamRecordOutputKafkaApp.class
-    );
+public class StreamRecordInMemoryApp {
+    private static Logger log =
+            LoggerFactory.getLogger(StreamRecordInMemoryApp.class);
 
     public static void main(String[] args) {
-        StreamRecordOutputKafkaApp app = new StreamRecordOutputKafkaApp();
+        StreamRecordInMemoryApp app = new StreamRecordInMemoryApp();
         try {
             app.start();
         } catch (TimeoutException e) {
@@ -51,20 +49,30 @@ public class StreamRecordOutputKafkaApp {
         StreamingQuery query = df
                 .writeStream()
                 .outputMode(OutputMode.Append())
-                .format("kafka")
-                .option("kafka.bootstrap.servers", "host1:port1,host2:port2")
-                .option("topic", "updates")
+                .format("memory")
+                .option("queryName", "people")
                 .start();
 
-        try {
-            query.awaitTermination(60000);
-        } catch (StreamingQueryException e) {
-            log.error(
-                    "Exception while waiting for query to end {}.",
-                    e.getMessage(),
-                    e);
+        // Wait and process the incoming stream for the next minute
+        Dataset<Row> queryInMemoryDf;
+        int iterationCount = 0;
+        long start = System.currentTimeMillis();
+        while (query.isActive()) {
+            queryInMemoryDf = spark.sql("SELECT * FROM people");
+            iterationCount++;
+            log.debug("Pass #{}, dataframe contains {} records",
+                    iterationCount,
+                    queryInMemoryDf.count());
+            queryInMemoryDf.show();
+            if (start + 60000 < System.currentTimeMillis()) {
+                query.stop(); // #F
+            }
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                // Simply ignored
+            }
         }
-
         log.debug("<- start()");
     }
 }

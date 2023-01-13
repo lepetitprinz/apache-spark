@@ -1,4 +1,4 @@
-package ingestion.utils
+package ingestion.file.utils
 
 import org.apache.spark.sql.{Dataset, Row}
 import org.apache.spark.sql.types.StructType
