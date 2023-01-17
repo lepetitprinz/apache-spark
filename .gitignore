@@ -96,3 +96,4 @@ replay_pid*
 *.orc
 *.parquet
 *.avro
+*.png

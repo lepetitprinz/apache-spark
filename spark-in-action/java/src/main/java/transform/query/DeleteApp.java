@@ -1,4 +1,4 @@
-package transform.sql;
+package transform.query;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -7,15 +7,20 @@ import org.apache.spark.sql.functions;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class SqlAndApiApp {
+public class DeleteApp {
+    private static transient Logger log = LoggerFactory.getLogger(DeleteApp.class);
+
     public static void main(String[] args) {
-        SqlAndApiApp app = new SqlAndApiApp();
+        DeleteApp app = new DeleteApp();
         app.start();
     }
 
     private void start() {
-        // Creates a session on al local master
+        log.debug("-> start()");
+
         SparkSession spark = SparkSession.builder()
                 .appName("Simple SQL")
                 .master("local")
@@ -64,7 +69,6 @@ public class SqlAndApiApp {
                 .schema(schema)
                 .load("data/ch11/populationbycountry19802010millions.csv");
 
-        // Remove the columns that do not want
         for (int i = 1981; i < 2010; i++) {
             df = df.drop(df.col("yr" + i));
         }
@@ -75,24 +79,16 @@ public class SqlAndApiApp {
                 functions.expr("round((yr2010 - yr1980) * 1000000)"));
         df.createOrReplaceTempView("geodata");
 
-        Dataset<Row> negativeEvolutionDf =
+        log.debug("Territories in orginal dataset: {}", df.count());
+        Dataset<Row> cleanedDf =
                 spark.sql(
-                        "SELECT * FROM geodata "
-                        + "WHERE geo IS NOT NULL AND evolution<=0 "
-                        + "ORDER BY evolution "
-                        + "LIMIT 25"
-                );
-
-        negativeEvolutionDf.show(15, false);
-
-        Dataset<Row> moreThanAMillionDF =
-                spark.sql(
-                        "SELECT * FROM geodata "
-                        + "WHERE geo IS NOT NULL AND evolution>999999 "
-                        + "ORDER BY evolution DESC "
-                        + "LIMIT 25"
-                );
-
-        moreThanAMillionDF.show(15, false);
+                        "select * from geodata where geo is not null "
+                                + "and geo NOT IN ('World', 'Africa', 'North America', "
+                                + "'Asia & Oceania', 'Central & South America', 'Europe'"
+                                + "'Eurasia', 'Middle East') "
+                                + "order by yr2010 desc");
+        log.debug("Territories in cleaned dataset: {}",
+                cleanedDf.count());
+        cleanedDf.show(20, false);
     }
 }

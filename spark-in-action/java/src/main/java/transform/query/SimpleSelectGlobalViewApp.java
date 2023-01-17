@@ -1,4 +1,4 @@
-package transform.sql;
+package transform.query;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -6,8 +6,6 @@ import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
-
-import javax.xml.crypto.Data;
 
 public class SimpleSelectGlobalViewApp {
     public static void main(String[] args) {

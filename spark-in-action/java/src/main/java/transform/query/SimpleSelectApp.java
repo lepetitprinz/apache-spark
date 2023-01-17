@@ -1,4 +1,4 @@
-package transform.sql;
+package transform.query;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
