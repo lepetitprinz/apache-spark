@@ -89,12 +89,5 @@ replay_pid*
 
 *.cache
 *.xml
-*.jpg
-*.txt
-*.csv
-*.json
-*.orc
-*.parquet
-*.avro
-*.png
+
 *.properties
