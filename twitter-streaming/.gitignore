@@ -23,6 +23,7 @@
 /out/
 /bin/
 /sandbox/
+/data/
 
 # intellij
 /src/intellij*/*.iml
