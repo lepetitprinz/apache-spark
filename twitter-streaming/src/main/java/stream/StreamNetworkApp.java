@@ -1,8 +1,6 @@
 package stream;
 
-import static org.apache.spark.sql.functions.split;
-import static org.apache.spark.sql.functions.expr;
-import static org.apache.spark.sql.functions.regexp_replace;
+import static org.apache.spark.sql.functions.*;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -18,16 +16,15 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeoutException;
 
-public class StreamConsoleApp {
+public class StreamNetworkApp {
     private static final String TWEET_ID = "edit_history_tweet_ids";
     private static final String ID = "id";
     private static final String TEXT = "text";
     private static final int TIME_OUT = 1000 * 60;
-
     private static Logger log =
-            LoggerFactory.getLogger(StreamConsoleApp.class);
+            LoggerFactory.getLogger(StreamNetworkApp.class);
     public static void main(String[] args) {
-        StreamConsoleApp app = new StreamConsoleApp();
+        StreamNetworkApp app = new StreamNetworkApp();
         try {
             app.start();
         } catch (TimeoutException e) {
@@ -55,11 +52,9 @@ public class StreamConsoleApp {
 
         Dataset<Row> df = spark
                 .readStream()
-                .format("csv")
-                .schema(schema)
-                .option("header", "true")
-                .option("delimiter", ",")
-                .option("encoding", "utf-8")
+                .format("socket")
+                .option("host", "localhost")
+                .option("port", 9999)
                 .load("data/stream");
 
         // Data Preprocessing
@@ -92,18 +87,19 @@ public class StreamConsoleApp {
 
         df = df.drop(TEXT, "dataSplit");
 
-        df.printSchema();
-
         StreamingQuery query = df
                 .writeStream()
                 .outputMode(OutputMode.Append())
-                .format("console")
+                .format("json")
+                .option("encoding", "utf-8")
+                .option("path", "data/output/")
+                .option("checkpointLocation", "data/output/checkpoint")
                 .start();
 
         try {
             query.awaitTermination(TIME_OUT);
         } catch (StreamingQueryException e) {
-            log.error("Exception while waiting for query to end ", e.getMessage(), e);
+            log.error("Exception while waiting for query to end", e.getMessage(), e);
         }
     }
 }

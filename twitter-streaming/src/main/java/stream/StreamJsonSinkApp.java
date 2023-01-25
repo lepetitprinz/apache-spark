@@ -17,6 +17,10 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.TimeoutException;
 
 public class StreamJsonSinkApp {
+    private static final String TWEET_ID = "edit_history_tweet_ids";
+    private static final String ID = "id";
+    private static final String TEXT = "text";
+    private static final int TIME_OUT = 1000 * 60;
     private static Logger log =
             LoggerFactory.getLogger(StreamJsonSinkApp.class);
     public static void main(String[] args) {
@@ -39,11 +43,11 @@ public class StreamJsonSinkApp {
         // Specify the record types
         StructType schema = DataTypes.createStructType(new StructField[]{
                 DataTypes.createStructField(
-                        "tweetId", DataTypes.StringType, true),
+                        TWEET_ID, DataTypes.StringType, true),
                 DataTypes.createStructField(
-                        "seqId", DataTypes.StringType, true),
+                        ID, DataTypes.StringType, true),
                 DataTypes.createStructField(
-                        "rawData", DataTypes.StringType, true)
+                        TEXT, DataTypes.StringType, true)
         });
 
         Dataset<Row> df = spark
@@ -57,11 +61,11 @@ public class StreamJsonSinkApp {
 
         // Data Preprocessing
         // Split twitter data
-        df = df.drop("tweetId");
-        df = df.withColumn("dataSplit", split(df.col("rawData"), " "));
+        df = df.drop(TWEET_ID);
+        //df = df.withColumn("dataSplit", split(df.col(TEXT), " "));
 
         // Remove retweet id
-        df = df.withColumn("data", expr("filter(dataSplit, x -> x not rlike '@')"));
+        df = df.withColumn("data", expr("filter(data, x -> x not rlike '@')"));
 
         df = df.withColumn("data", expr("filter(data, x -> x !='')"));
 
@@ -83,7 +87,7 @@ public class StreamJsonSinkApp {
                 "data",
                 regexp_replace(df.col("data"), "^\\s+$", ""));
 
-        df = df.drop("rawData", "dataSplit");
+        df = df.drop(TEXT, "dataSplit");
 
         StreamingQuery query = df
                 .writeStream()
@@ -95,7 +99,7 @@ public class StreamJsonSinkApp {
                 .start();
 
         try {
-            query.awaitTermination(10000);
+            query.awaitTermination(TIME_OUT);
         } catch (StreamingQueryException e) {
             log.error("Exception while waiting for query to end", e.getMessage(), e);
         }
