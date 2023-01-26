@@ -14,8 +14,6 @@ object QueryOnJsonApp {
       .format("json")
       .option("multiline", "true")
       .load("data/ch12/json/store.json")
-
-    val df2 = df.withColumn("items", )
   }
 
 }
