@@ -43,7 +43,7 @@ public class OpenedLibrariesApp {
                 .option("header", "true")
                 .option("inferSchema", "true")
                 .option("encoding", "cp1252")
-                .load("data/ch14/south_dublin_libraries/sdlibraries.csv")
+                .load("data/ch14/south_dublin_libraries/sdlibraries.csv");
 
 
         librariesDf.show(false);
