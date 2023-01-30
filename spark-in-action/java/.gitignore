@@ -23,6 +23,7 @@
 /out/
 /bin/
 /sandbox/
+/checkpoint/
 
 # intellij
 /src/intellij*/*.iml
