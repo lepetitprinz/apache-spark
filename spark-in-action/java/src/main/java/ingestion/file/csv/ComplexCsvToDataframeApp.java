@@ -21,7 +21,7 @@ public class ComplexCsvToDataframeApp {
 
         spark.sparkContext().setLogLevel("ERROR");
 
-        // Reads a csv file with header, sotres it in a dataframe
+        // Reads a csv file with header, stores it in a dataframe
         Dataset<Row> df = spark.read().format("csv")
                 .option("header", "true")
                 .option("multiline", true)
